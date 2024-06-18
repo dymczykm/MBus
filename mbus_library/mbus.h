@@ -21,6 +21,7 @@ limitations under the License.
 #define MBUS_H
 
 #include "Arduino.h"
+#include "TeensyTimerTool.h"
 
 #define Shutdown 0x11142
 #define Ping 0x18

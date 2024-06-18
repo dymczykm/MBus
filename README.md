@@ -17,6 +17,8 @@ Since commits in October 2023, the library has been developed and tested on Teen
 * https://github.com/picohari/atmega128_alpine-mbus-emulator
 * https://github.com/kjanesch/pseudochanger (Panasonic version)
 * https://www.avrfreaks.net/projects/alpine-m-bus-communication-audio-input-activation
+* https://github.com/timotto/UbarCDC/tree/master
+* https://github.com/timotto/AsyncMBus
 
 
 ### Original readme of Oliver Mueller

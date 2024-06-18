@@ -35,17 +35,21 @@ MBus::MBus(uint8_t pin_in, uint8_t pin_out) : pin_in_(pin_in),
 }
 
 void MBus::sendZero() {
-  digitalWrite(pin_out_, HIGH);
-  delayMicroseconds(600);
+  NVIC_DISABLE_IRQ(IRQ_GPIO6789);
   digitalWrite(pin_out_, LOW);
+  delayMicroseconds(600);
+  digitalWrite(pin_out_, HIGH);
   delayMicroseconds(2400);
+  NVIC_ENABLE_IRQ(IRQ_GPIO6789);
 }
 
 void MBus::sendOne() {
-  digitalWrite(pin_out_, HIGH);
-  delayMicroseconds(1800);
+  NVIC_DISABLE_IRQ(IRQ_GPIO6789);
   digitalWrite(pin_out_, LOW);
+  delayMicroseconds(1800);
+  digitalWrite(pin_out_, HIGH);
   delayMicroseconds(1200);
+  NVIC_ENABLE_IRQ(IRQ_GPIO6789);
 }
 
 void MBus::writeHexBitwise(uint8_t message) {
@@ -73,9 +77,9 @@ boolean MBus::checkParity(uint64_t* message) {
 }
 
 void MBus::send(const uint64_t message) {
-  Serial.print("sending: ");
-  printMessage(message);
-  Serial.println();
+  // Serial.print("sending: ");
+  // printMessage(message);
+  // Serial.println();
 
   uint8_t printed = 0;
   uint8_t parity = 0;
@@ -342,9 +346,9 @@ MBus::DiskTrackChange MBus::interpretSetDiskTrackMessage(const uint64_t message)
   // sprintf(received_message_char, "%08lX", (message >> (4*5)));  
   // Serial.println(received_message_char);
 
-  char data_char[20];
-  sprintf_P(data_char, (const char*)F("Change: d=%d t=%d"), out_data.disc, out_data.track);  
-  Serial.println(data_char);
+  // char data_char[20];
+  // sprintf_P(data_char, (const char*)F("Change: d=%d t=%d"), out_data.disc, out_data.track);  
+  // Serial.println(data_char);
 
   return out_data;
 }
