@@ -32,6 +32,7 @@ MBus::MBus(uint8_t pin_in, uint8_t pin_out) : pin_in_(pin_in),
 
   pinMode(pin_in_, INPUT_PULLUP);
   pinMode(pin_out_,OUTPUT);
+  digitalWrite(pin_out_, HIGH);
 }
 
 void MBus::sendZero() {
@@ -199,11 +200,12 @@ void MBus::sendPlayingTrack(uint8_t track_number, uint16_t track_time_sec, PlayS
       strcpy_P(state_str, (const char*)F("unknown"));
   }
 
-  char message_char[42];
-  const uint16_t track_minutes = track_time_sec / 60;
-  const uint16_t track_seconds = track_time_sec % 60;
-  sprintf_P(message_char, (const char*)F("CDC: track %d, time %02d:%02d, %s"), track_number, track_minutes, track_seconds, state_str);
-  Serial.println(message_char);
+  // Logging helper, not needed anymore but might come handy.
+  //char message_char[42];
+  //const uint16_t track_minutes = track_time_sec / 60;
+  //const uint16_t track_seconds = track_time_sec % 60;
+  //sprintf_P(message_char, (const char*)F("CDC: track %d, time %02d:%02d, %s"), track_number, track_minutes, track_seconds, state_str);
+  //Serial.println(message_char);
 
   send(play);
 }
@@ -329,12 +331,12 @@ MBus::DiskTrackChange MBus::interpretSetDiskTrackMessage(const uint64_t message)
   DiskTrackChange out_data;
 
   if ((message >> (4*5)) == 0x113) {
-    Serial.println(F("setDiskTrack format 7618."));
+    //Serial.println(F("setDiskTrack format 7618."));
     out_data.disc = (message & ((uint64_t)0xF << (4*4))) >> (4*4);
     out_data.track = (message & ((uint64_t)0xF << (4*2))) >> (4*2);
     out_data.track +=((message&((uint64_t)0xF<<(4*3)))>>(4*3))*10;
   } else if ((message >> (4*4)) == 0x113) {
-    Serial.println(F("setDiskTrack format 7909."));
+    //Serial.println(F("setDiskTrack format 7909."));
     out_data.disc = (message & ((uint64_t)0xF << (4*3))) >> (4*3);
     out_data.track = (message & ((uint64_t)0xF << (4*1))) >> (4*1);
     out_data.track +=((message&((uint64_t)0xF<<(4*2)))>>(4*2))*10;
