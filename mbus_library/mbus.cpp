@@ -162,8 +162,6 @@ void MBus::sendPlayingTrack(uint8_t track_number, int16_t track_time_sec, PlaySt
 
   if (is_track_time_positive) {
     play |= (uint64_t)0xF << (8 * 4);
-  } else {
-    Serial.println("negative");
   }
 
   play |= (uint64_t)((track_time_sec_abs % 60) % 10) << (4 * 4);
