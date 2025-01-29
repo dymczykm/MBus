@@ -80,7 +80,7 @@ class MBus {
       PlayState play_state;
     };
 
-    void sendPlayingTrack(uint8_t track_number, uint16_t track_time_sec,
+    void sendPlayingTrack(uint8_t track_number, int16_t track_time_sec,
                           PlayState play_state);
     void sendChangingDisc(uint8_t disc_number, uint8_t track_number,
                           ChangingStatus changing_status);

@@ -147,18 +147,29 @@ boolean MBus::receive(uint64_t* message) {
 // CD-changer emulation from here on.
 // -----------------------------------
 
-void MBus::sendPlayingTrack(uint8_t track_number, uint16_t track_time_sec, PlayState play_state) {
-  uint64_t play = 0x990000100000000ull;
+void MBus::sendPlayingTrack(uint8_t track_number, int16_t track_time_sec, PlayState play_state) {
+  uint64_t play = 0x990000000000000ull;
+
+  // Note - the minus sign won't be displayed if the track time is over 9m59s (because of not enough headunit display space).
+  const bool is_track_time_positive = track_time_sec >= 0;
+  const uint16_t track_time_sec_abs = abs(track_time_sec);
+
 
   play |= (uint64_t)play_state << (12 * 4);
 
   play |= (uint64_t)(track_number % 10) << (10 * 4);
   play |= (uint64_t)(track_number / 10) << (11 * 4);
 
-  play |= (uint64_t)((track_time_sec % 60) % 10) << (4 * 4);
-  play |= (uint64_t)((track_time_sec % 60) / 10) << (5 * 4);
-  play |= (uint64_t)((track_time_sec / 60) % 10) << (6 * 4);         // Minutes
-  play |= (uint64_t)(((track_time_sec / 60) % 100) / 10) << (7 * 4); // Tens of minutes
+  if (is_track_time_positive) {
+    play |= (uint64_t)0xF << (8 * 4);
+  } else {
+    Serial.println("negative");
+  }
+
+  play |= (uint64_t)((track_time_sec_abs % 60) % 10) << (4 * 4);
+  play |= (uint64_t)((track_time_sec_abs % 60) / 10) << (5 * 4);
+  play |= (uint64_t)((track_time_sec_abs / 60) % 10) << (6 * 4);         // Minutes
+  play |= (uint64_t)(((track_time_sec_abs / 60) % 100) / 10) << (7 * 4); // Tens of minutes
 
  switch (play_state) {
   case kPaused:
