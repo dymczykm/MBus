@@ -247,9 +247,10 @@ uint64_t changed_disc_message = 0x9B000000001ull;
       strcpy_P(change_status_str, (const char*)F("unknown"));
   }
 
-  char message_char[40];
-  sprintf_P(message_char, (const char*)F("Disc change: t%d, d%d, %s"), track_number, disc_number, change_status_str);
-  Serial.println(message_char);
+  // Debug print.
+  //char message_char[40];
+  //sprintf_P(message_char, (const char*)F("Disc change: t%d, d%d, %s"), track_number, disc_number, change_status_str);
+  //Serial.println(message_char);
 
   changed_disc_message |= (uint64_t)disc_number << (7 * 4);
 
